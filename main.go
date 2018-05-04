@@ -1,12 +1,13 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"time"
 
 	"flag"
+
+	"runtime"
 
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
@@ -17,7 +18,7 @@ const (
 	windowHeight = 600
 	floorY       = 575
 	startX       = 10
-	gravity      = 9.8
+	gravity      = 0.4
 )
 
 var (
@@ -68,10 +69,18 @@ func run() error {
 	}
 	defer s.Destroy()
 
-	ctx, cancel := context.WithCancel(context.Background())
-	time.AfterFunc(5*time.Second, cancel)
+	events := make(chan sdl.Event)
 
-	return <-s.Run(ctx, r)
+	errChan := s.Run(events, r)
+
+	runtime.LockOSThread()
+	for {
+		select {
+		case events <- sdl.WaitEvent():
+		case err := <-errChan:
+			return err
+		}
+	}
 }
 
 func drawTitle(r *sdl.Renderer) error {

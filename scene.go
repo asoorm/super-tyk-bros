@@ -1,9 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"time"
+
+	"log"
 
 	"github.com/veandco/go-sdl2/gfx"
 	"github.com/veandco/go-sdl2/img"
@@ -53,18 +54,22 @@ func (s *Scene) paint(r *sdl.Renderer) error {
 	return nil
 }
 
-func (s *Scene) Run(ctx context.Context, r *sdl.Renderer) <-chan error {
+func (s *Scene) Run(events <-chan sdl.Event, r *sdl.Renderer) <-chan error {
 
 	errChan := make(chan error)
 
 	go func() {
 		defer close(errChan)
 
-		for range time.Tick(time.Millisecond * 10) {
+		tick := time.Tick(time.Millisecond * 10)
+
+		for {
 			select {
-			case <-ctx.Done():
-				return
-			default:
+			case e := <-events:
+				if done := s.handleEvent(e); done {
+					return
+				}
+			case <-tick:
 				if err := s.paint(r); err != nil {
 					errChan <- err
 				}
@@ -73,6 +78,25 @@ func (s *Scene) Run(ctx context.Context, r *sdl.Renderer) <-chan error {
 	}()
 
 	return errChan
+}
+
+func (s *Scene) handleEvent(event sdl.Event) bool {
+
+	switch e := event.(type) {
+	case *sdl.QuitEvent:
+		return true
+	case *sdl.MouseMotionEvent, *sdl.TouchFingerEvent, *sdl.MouseButtonEvent, *sdl.WindowEvent,
+		*sdl.AudioDeviceEvent:
+		return false
+	case *sdl.KeyboardEvent:
+		if e.Type == sdl.KEYUP {
+			s.tyk.jump()
+		}
+	default:
+		log.Printf("event: %T", event)
+	}
+
+	return false
 }
 
 func (s *Scene) Destroy() {
