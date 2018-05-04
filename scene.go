@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/veandco/go-sdl2/gfx"
 	"github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -40,6 +41,11 @@ func (s *Scene) paint(r *sdl.Renderer) error {
 
 	if err := s.tyk.paint(r); err != nil {
 		return fmt.Errorf("could not paint tyk: %v", err)
+	}
+
+	if flagDebug {
+		// draw floor
+		gfx.LineColor(r, 0, floorY, windowWidth, floorY, sdl.Color{255, 0, 0, 255})
 	}
 
 	r.Present()

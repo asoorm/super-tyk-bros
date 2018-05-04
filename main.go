@@ -6,6 +6,8 @@ import (
 	"log"
 	"time"
 
+	"flag"
+
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -13,15 +15,24 @@ import (
 const (
 	windowWidth  = 800
 	windowHeight = 600
+	floorY       = 575
+	startX       = 10
+	gravity      = 9.8
 )
 
 var (
 	colorTitle = sdl.Color{
 		R: 0, G: 0, B: 255, A: 0,
 	}
+
+	flagDebug = false
 )
 
 func main() {
+
+	flag.BoolVar(&flagDebug, "debug", false, "set debug mode")
+	flag.Parse()
+
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}

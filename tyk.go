@@ -10,6 +10,10 @@ import (
 type Tyk struct {
 	time     int64
 	textures []*sdl.Texture
+	y        float64
+	x        float64
+	w        int32
+	h        int32
 }
 
 func NewTyk(r *sdl.Renderer) (*Tyk, error) {
@@ -24,7 +28,8 @@ func NewTyk(r *sdl.Renderer) (*Tyk, error) {
 		textures = append(textures, texture)
 	}
 
-	return &Tyk{textures: textures}, nil
+	//tykRect := &sdl.Rect{X: 10, Y: 495, H: 80, W: 75}
+	return &Tyk{textures: textures, y: floorY, x: startX, w: 75, h: 80}, nil
 }
 
 func (t *Tyk) paint(r *sdl.Renderer) error {
@@ -32,7 +37,7 @@ func (t *Tyk) paint(r *sdl.Renderer) error {
 
 	i := t.time / 10 % int64(len(t.textures))
 
-	tykRect := &sdl.Rect{X: 10, Y: 495, H: 80, W: 75}
+	tykRect := &sdl.Rect{X: int32(t.x), Y: int32(t.y) - t.h, H: t.h, W: t.w}
 	if err := r.Copy(t.textures[i], nil, tykRect); err != nil {
 		return fmt.Errorf("could not copy tyk: %v", err)
 	}
