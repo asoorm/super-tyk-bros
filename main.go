@@ -20,6 +20,7 @@ const (
 )
 
 var (
+	gameTitle  = "Super Tyk Bros."
 	colorTitle = sdl.Color{
 		R: 0, G: 0, B: 255, A: 0,
 	}
@@ -32,14 +33,14 @@ var (
 func init() {
 	flag.BoolVar(&flagDebug, "debug", false, "set debug mode")
 
+	flag.Parse()
+
 	if flagDebug {
-		log.Level = logrus.DebugLevel
+		logrus.SetLevel(logrus.DebugLevel)
 	}
 }
 
 func main() {
-
-	flag.Parse()
 
 	if err := run(); err != nil {
 		log.Fatal(err)
@@ -68,7 +69,7 @@ func run() error {
 		return fmt.Errorf("could not draw title: %v", err)
 	}
 
-	time.Sleep(time.Second * 1)
+	time.Sleep(time.Second * 3)
 
 	s, err := NewScene(r)
 	if err != nil {
@@ -99,7 +100,7 @@ func drawTitle(r *sdl.Renderer) error {
 	}
 	defer f.Close()
 
-	s, err := f.RenderUTF8Solid("Super Tyk Bros.", colorTitle)
+	s, err := f.RenderUTF8Solid(gameTitle, colorTitle)
 	if err != nil {
 		return fmt.Errorf("could not render title: %v", err)
 	}

@@ -20,7 +20,7 @@ type Baddie struct {
 
 func NewBaddie(r *sdl.Renderer) (*Baddie, error) {
 
-	path := "./assets/sprites/baddie-01.png"
+	path := "./assets/sprites/banana-01.png"
 
 	texture, err := img.LoadTexture(r, path)
 	if err != nil {

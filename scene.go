@@ -102,8 +102,7 @@ func (s *Scene) handleEvent(event sdl.Event) bool {
 		case sdl.KEYDOWN:
 			switch e.Keysym.Sym {
 			case sdl.K_LEFT:
-				log.Info("pressed: left")
-
+				log.Debug("pressed: left")
 				restriction := 1.0
 				// if in air, restrict movement
 				if s.tyk.yPos != floorY {
@@ -111,18 +110,17 @@ func (s *Scene) handleEvent(event sdl.Event) bool {
 				}
 				s.tyk.xVelocity = -5 * restriction
 			case sdl.K_RIGHT:
-				log.Info("pressed: right")
+				log.Debug("pressed: right")
 				restriction := 1.0
 				// if in air, restrict movement
 				if s.tyk.yPos != floorY {
 					restriction = 0.5
 				}
-
 				s.tyk.xVelocity = 5 * restriction
 			case sdl.K_UP:
-				log.Info("pressed: up")
+				log.Debug("pressed: up")
 				if s.tyk.yPos == floorY {
-					println("onFloor")
+					log.Debug("onFloor")
 					s.tyk.yVelocity -= 10
 				}
 				//case sdl.K_DOWN:
@@ -132,13 +130,13 @@ func (s *Scene) handleEvent(event sdl.Event) bool {
 		case sdl.KEYUP:
 			switch e.Keysym.Sym {
 			case sdl.K_LEFT:
-				log.Info("released: left")
+				log.Debug("released: left")
 				// if tyk is moving to the left, we zero the velocity
 				if s.tyk.xVelocity < 0 {
 					s.tyk.xVelocity = 0
 				}
 			case sdl.K_RIGHT:
-				log.Info("released: right")
+				log.Debug("released: right")
 				// if tyk is moving to the right, we zero the velocity
 				if s.tyk.xVelocity > 0 {
 					s.tyk.xVelocity = 0
@@ -153,7 +151,7 @@ func (s *Scene) handleEvent(event sdl.Event) bool {
 			}
 		}
 	default:
-		log.Info("event: %T", event)
+		log.Debug("other event: %T", event)
 	}
 
 	return false
