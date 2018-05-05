@@ -1,14 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"log"
+	"runtime"
 	"time"
 
-	"flag"
-
-	"runtime"
-
+	"github.com/Sirupsen/logrus"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
@@ -18,7 +16,7 @@ const (
 	windowHeight = 600
 	floorY       = 575
 	startX       = 10
-	gravity      = 0.4
+	gravity      = 0.3
 )
 
 var (
@@ -27,11 +25,20 @@ var (
 	}
 
 	flagDebug = false
+
+	log = logrus.WithField("prefix", "main")
 )
+
+func init() {
+	flag.BoolVar(&flagDebug, "debug", false, "set debug mode")
+
+	if flagDebug {
+		log.Level = logrus.DebugLevel
+	}
+}
 
 func main() {
 
-	flag.BoolVar(&flagDebug, "debug", false, "set debug mode")
 	flag.Parse()
 
 	if err := run(); err != nil {
