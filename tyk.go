@@ -80,7 +80,6 @@ func (t *Tyk) paint(r *sdl.Renderer) error {
 	}
 
 	tykRect := &sdl.Rect{X: int32(t.xPos), Y: int32(t.yPos) - t.height, H: t.height, W: t.width}
-	//log.Infof("tyk: %#v\n", tykRect)
 
 	if err := r.Copy(t.textures[i], nil, tykRect); err != nil {
 		return fmt.Errorf("could not copy tyk: %v", err)
