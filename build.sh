@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# https://github.com/veandco/go-sdl2-packaging-example
+
 # build for mac os
 go build
 
@@ -18,6 +20,7 @@ otool -L ./super-tyk-bros | \
     sudo cp $lib ./super-tyk-bros.app/Contents/Frameworks/ ;
     done
 mv super-tyk-bros ./super-tyk-bros.app/Contents/MacOS/
+cp -r assets ./super-tyk-bros.app/Contents/MacOS/
 
 cat > ./super-tyk-bros.app/Contents/Info.plist <<- EOM
 <?xml version="1.0" encoding="UTF-8"?>
@@ -25,13 +28,13 @@ cat > ./super-tyk-bros.app/Contents/Info.plist <<- EOM
 <plist version="1.0">
 <dict>
 	<key>CFBundleExecutable</key>
-	<string>go-sdl2-example</string>
+	<string>super-tyk-bros</string>
 	<key>CFBundleIdentifier</key>
-	<string>co.veand.gosdl2.example</string>
+	<string>co.asoorm.super-tyk-bros</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleDisplayName</key>
-	<string>Go-SDL2 Example</string>
+	<string>Super Tyk Bros.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<string>false</string>
 </dict>
